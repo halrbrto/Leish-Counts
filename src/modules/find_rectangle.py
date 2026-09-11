@@ -1,6 +1,3 @@
-import cv2 
-import numpy as np  
-import os
 from itertools import combinations
 
 def encontrar_retangulo(
@@ -11,10 +8,24 @@ def encontrar_retangulo(
     tolerancia_largura=0.10,
     tolerancia_altura=0.10
 ):
+    """Find the rectangle whose dimensions best match the expected values.
+
+    Args:
+        xs: X-coordinates of candidate vertical lines.
+        ys: Y-coordinates of candidate horizontal lines.
+        largura_esperada: Expected rectangle width in pixels.
+        altura_esperada: Expected rectangle height in pixels.
+        tolerancia_largura: Maximum relative width error allowed.
+        tolerancia_altura: Maximum relative height error allowed.
+
+    Returns:
+        A dictionary describing the best matching rectangle, or ``None`` if
+        no pair satisfies both tolerances.
+    """
 
     candidatos = []
 
-    # Todas as combinações de duas linhas verticais
+    # Generate every possible pair of vertical lines.
     pares_verticais = combinations(
         sorted(xs),
         2
@@ -33,11 +44,11 @@ def encontrar_retangulo(
             largura_esperada
         )
 
-        # Descarta larguras muito diferentes
+        # Ignore widths that are outside the allowed tolerance.
         if erro_largura > tolerancia_largura:
             continue
 
-        # Todas as combinações de duas linhas horizontais
+        # Generate every possible pair of horizontal lines.
         pares_horizontais = combinations(
             sorted(ys),
             2
@@ -56,11 +67,11 @@ def encontrar_retangulo(
                 altura_esperada
             )
 
-            # Descarta alturas muito diferentes
+            # Ignore heights that are outside the allowed tolerance.
             if erro_altura > tolerancia_altura:
                 continue
 
-            # Erro total
+            # Combine the width and height errors into one score.
             erro_total = (
                 erro_largura +
                 erro_altura
@@ -80,13 +91,14 @@ def encontrar_retangulo(
                 "erro": erro_total
             })
 
-    # Nenhum retângulo encontrado
+    # Return None when no candidate meets both tolerances.
     if not candidatos:
         return None
 
-    # Menor erro primeiro
+    # Sort candidates from the smallest error to the largest.
     candidatos.sort(
         key=lambda r: r["erro"]
     )
 
+    # The first candidate is the best match.
     return candidatos[0]

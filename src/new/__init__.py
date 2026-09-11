@@ -1,0 +1,2 @@
+from new.detect_rectangle import detect_rectangle
+from new.separate_lines import separate_lines

@@ -1,6 +1,3 @@
-import numpy as np
-
-
 def separate_lines(lines, angle_tolerance=10):
 
     verticals = []

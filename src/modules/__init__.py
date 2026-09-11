@@ -1,6 +1,4 @@
-from .{modulo_name} import {classe_ou_funcao}
-# Definir tudo aqui
-
-# Facilita o processo de chamar funções e classes 
-# de outros módulos dentro do pacote, chamando a pasta modules 
-# como um todo, sem precisar especificar o módulo individualmente.
+from modules.group_coordinates import agrupar_coordenadas
+from modules.find_rectangle import encontrar_retangulo
+from modules.separate_lines import separar_linhas
+from modules.detect_retangle import detect_retangle

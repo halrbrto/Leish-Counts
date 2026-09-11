@@ -1,50 +1,55 @@
-import cv2 
 import numpy as np  
-import os
-from itertools import combinations
 
+def group_coordinates(coordinates, distance=10): 
 
-def agrupar_coordenadas(coordenadas, distancia=10):
-
-    if len(coordenadas) == 0:
+    # Return an empty list when no coordinates are provided.
+    if len(coordinates) == 0:
         return []
 
-    coordenadas = sorted(coordenadas)
+    # Sort coordinates so that nearby values can be processed sequentially.
+    coordinates = sorted(coordinates)
 
-    grupos = []
+    # Store the completed groups of nearby coordinates.
+    groups = []
 
-    grupo_atual = [
-        coordenadas[0]
+    # Start the first group with the smallest coordinate.
+    current_group = [
+        coordinates[0]
     ]
 
-    for valor in coordenadas[1:]:
+    # Compare each remaining coordinate with the current group's center.
+    for value in coordinates[1:]:
 
-        centro = np.mean(
-            grupo_atual
+        # Calculate the center of the coordinates in the current group.
+        center = np.mean(
+            current_group
         )
 
-        if abs(valor - centro) <= distancia:
+        # Add the value to the current group when it is within the allowed distance.
+        if abs(value - center) <= distance:
 
-            grupo_atual.append(valor)
+            current_group.append(value)
 
+        # Otherwise, finish the current group and start a new one.
         else:
 
-            grupos.append(
-                grupo_atual
+            groups.append(
+                current_group
             )
 
-            grupo_atual = [
-                valor
+            current_group = [
+                value
             ]
 
-    grupos.append(
-        grupo_atual
+    # Add the final group after all coordinates have been processed.
+    groups.append(
+        current_group
     )
 
-    # Representa cada grupo pelo seu centro
-    centros = [
-        np.mean(grupo)
-        for grupo in grupos
+    # Represent each group by its center.
+    centers = [
+        np.mean(group)
+        for group in groups
     ]
-
-    return centros
+    
+    return centers

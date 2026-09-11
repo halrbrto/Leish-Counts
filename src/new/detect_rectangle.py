@@ -1,25 +1,27 @@
-import cv2 
-import numpy as np  
-import os
-from itertools import combinations
+import cv2
+import numpy as np
 
-from modules import group_coordinates
-from modules import encontrar_rectangle
-from modules import separate_lines
 
-def detect_retangle(
+def detect_rectangle(
     img,
     width=1080,
     height=548,
     distance=10
 ):
 
-    # 1. Pre-process of the image: turning gray and applying Canny edge detection
+    # ============================================
+    # 1. CONVERTER PARA ESCALA DE CINZA
+    # ============================================
 
     gray = cv2.cvtColor(
         img,
         cv2.COLOR_BGR2GRAY
     )
+
+
+    # ============================================
+    # 2. DETECTAR BORDAS
+    # ============================================
 
     edges = cv2.Canny(
         gray,
@@ -27,24 +29,24 @@ def detect_retangle(
         120
     )
 
-    # 2. Detect lines using Probabilistic Hough Transform
+
+    # ============================================
+    # 3. DETECTAR LINHAS
+    # ============================================
 
     lines = cv2.HoughLinesP(
         edges,
         rho=1,
-        theta=np.pi / 90,
+        theta=np.pi / 180,
         threshold=50,
         minLineLength=900,
         maxLineGap=150
     )
 
-    if lines is None:
-        return None
-
     # 3. To separate the lines into vertical and horizontal, 
     # we can use the slope of the lines.
     
-
+''' PRECISO CUIDAR DO SEPARATE LINES 
     verticals, horizontal = separate_lines(
         lines
     )
@@ -75,3 +77,4 @@ def detect_retangle(
     )
 
     return rectangle
+    '''
